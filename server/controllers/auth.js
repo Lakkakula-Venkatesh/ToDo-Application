@@ -4,9 +4,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const randomstring = require("randomstring");
 
-const SALT_ROUNDS = process.env.SALT_ROUNDS || 10;
-const TOKEN_SECRET =
-  process.env.TOKEN_SECRET || dirvnbpbcahqlbdwxhnzkkwagsrcscir;
+const SALT_ROUNDS = 10;
+const TOKEN_SECRET = "dirvnbpbcahqlbdwxhnzkkwagsrcscir";
 
 const login = async (req, res) => {
   const { email, password } = req.body;

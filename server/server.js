@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose.set("strictQuery", false);
 
-const PORT = process.env.PORT || 8000
+const PORT = 8000
 
 app.listen(PORT, () => {});
 
