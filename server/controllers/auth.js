@@ -4,6 +4,10 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const randomstring = require("randomstring");
 
+const SALT_ROUNDS = process.env.SALT_ROUNDS || 10;
+const TOKEN_SECRET =
+  process.env.TOKEN_SECRET || dirvnbpbcahqlbdwxhnzkkwagsrcscir;
+
 const login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -142,10 +146,8 @@ const generateResetToken = async (req, res) => {
 };
 
 const reset = async (req, res) => {
-  const { email, resetPasswordToken, iat, eat } = decryptToken(
-    req.body.token
-  );
-  
+  const { email, resetPasswordToken, iat, eat } = decryptToken(req.body.token);
+
   const user = await User.findOne({ email: email });
 
   if (user.resetPasswordToken !== resetPasswordToken) {
@@ -166,15 +168,15 @@ const reset = async (req, res) => {
 };
 
 const generateWebToken = data =>
-  jwt.sign(data, process.env.TOKEN_SECRET, { expiresIn: "24h" });
+  jwt.sign(data, TOKEN_SECRET, { expiresIn: "24h" });
 
 const getEncryptedPassword = password => {
-  const salt = bcrypt.genSaltSync(Number(process.env.SALT_ROUNDS));
+  const salt = bcrypt.genSaltSync(Number(SALT_ROUNDS));
   const encryptedPassword = bcrypt.hashSync(password, salt);
 
   return encryptedPassword;
 };
 
-const decryptToken = token => jwt.verify(token, process.env.TOKEN_SECRET);
+const decryptToken = token => jwt.verify(token, TOKEN_SECRET);
 
 module.exports = { login, register, update, logout, generateResetToken, reset };
