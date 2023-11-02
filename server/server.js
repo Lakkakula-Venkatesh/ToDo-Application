@@ -2,7 +2,7 @@ const cors = require("cors");
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-require("dotenv").config({ path: "../.env" });
+require("dotenv").config({ path: "../vars/.env" });
 const authRoutes = require("./routes/auth");
 
 const app = express();
@@ -19,7 +19,7 @@ app.listen(process.env.PORT, () => {});
 app.use("/api/auth", authRoutes);
 
 mongoose.connect(
-  `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.067gl2s.mongodb.net/?retryWrites=true&w=majority`,
+  "mongodb+srv://lakkakulavenkatesh8726:v42TMqcthrTZW9R7@cluster0.067gl2s.mongodb.net/?retryWrites=true&w=majority",
   {
     useNewUrlParser: true,
     useUnifiedTopology: true
