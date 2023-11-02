@@ -18,6 +18,10 @@ const PORT = 8000
 
 app.listen(PORT, () => {});
 
+app.get("/", (req, res) => {
+  res.json({ message: "API is working" });
+});
+
 app.use("/api/auth", authRoutes);
 
 mongoose.connect(
