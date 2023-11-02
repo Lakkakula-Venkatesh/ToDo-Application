@@ -1,0 +1,10 @@
+.container-fluid {
+  justify-content: end !important;
+}
+.navbar-brand {
+  background-color: white;
+  color: rgba(var(--bs-primary-rgb),var(--bs-bg-opacity))!important;
+}
+.auth-btn:hover {
+  background-color: darkgray;
+}
