@@ -20,7 +20,7 @@ export default function AuthForm({ type, checkIfUserSignedIn }) {
     setLoading(true);
 
     axios
-      .post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/login`, {
+      .post(`/api/auth/login`, {
         email: email,
         password: password
       })
