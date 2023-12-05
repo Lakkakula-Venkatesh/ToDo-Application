@@ -51,7 +51,7 @@ export default function AuthForm({ type, checkIfUserSignedIn }) {
     setLoading(true);
 
     axios
-      .post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/register`, {
+      .post(`/api/auth/register`, {
         name: name,
         email: email,
         mobile: mobile,
@@ -73,7 +73,7 @@ export default function AuthForm({ type, checkIfUserSignedIn }) {
     setLoading(true);
 
     axios
-      .post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/forgot`, {
+      .post(`/api/auth/forgot`, {
         email: email,
         password: password
       })

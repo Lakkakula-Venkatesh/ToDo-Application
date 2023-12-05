@@ -7,7 +7,7 @@ export default function Task(props) {
 
   const closeTask = taskId => {
     axios
-      .post(`${process.env.REACT_APP_BACKEND_URL}/api/tasks/complete`, { taskId: taskId })
+      .post(`/api/tasks/complete`, { taskId: taskId })
       .then(res => console.log(res))
       .catch(err => console.log(err));
   };

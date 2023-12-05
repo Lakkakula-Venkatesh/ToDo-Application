@@ -14,7 +14,7 @@ export default function TaskList() {
     if (token === undefined) navigate("/");
     else {
       axios
-        .get(`${process.env.REACT_APP_BACKEND_URL}/api/tasks/all`, {
+        .get(`/api/tasks/all`, {
           params: {
             token: token
           }
