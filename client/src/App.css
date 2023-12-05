@@ -3,8 +3,28 @@
 }
 .navbar-brand {
   background-color: white;
-  color: rgba(var(--bs-primary-rgb),var(--bs-bg-opacity))!important;
+  color: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity)) !important;
 }
 .auth-btn:hover {
   background-color: darkgray;
+}
+.middle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.page {
+  height: 80vh;
+  width: 100vw;
+}
+.nav-btns {
+  display: flex;
+  gap: 10px;
+  margin: 10px;
+  margin-left: auto;
+}
+.task-card {
+  width: 80vw;
+  display: flex;
+  justify-content: center;
 }

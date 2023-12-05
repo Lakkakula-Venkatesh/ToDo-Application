@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "./components/Navbar";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 import getCookie, { deleteCookie } from "./helpers/BrowserHelper";
 import ajax from "superagent";
 import ResetPassword from "./components/auth/ResetPassword";
+import TaskList from "./components/TaskList";
 
 function App() {
   const [authenticated, setAuthenticated] = React.useState(false);
@@ -29,6 +30,11 @@ function App() {
         deleteCookie("userToken");
       });
   };
+
+  useEffect(() => {
+    const token = getCookie("userToken");
+    if (token !== undefined) setAuthenticated(true);
+  }, []);
 
   return (
     <div className="App">
@@ -63,6 +69,7 @@ function App() {
               />
             }
           />
+          <Route path="/tasks" element={<TaskList />} />
           <Route path="/reset" element={<ResetPassword />} />
         </Routes>
       </Router>

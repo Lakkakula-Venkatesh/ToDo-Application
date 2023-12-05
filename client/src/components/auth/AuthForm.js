@@ -1,6 +1,6 @@
 import React from "react";
 import "./styles.css";
-import ajax from "superagent";
+import axios from "axios";
 import Loader from "../Loader";
 import { Link, useNavigate } from "react-router-dom";
 import { addCookie } from "../../helpers/BrowserHelper";
@@ -9,23 +9,40 @@ export default function AuthForm({ type, checkIfUserSignedIn }) {
   const [loading, setLoading] = React.useState(false);
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [name, setName] = React.useState("");
+  const [mobile, setMobile] = React.useState("");
+  const [userNotFound, setUserNotFound] = React.useState(false);
+  const [wrongPassword, setWrongPassword] = React.useState(false);
   const navigate = useNavigate();
 
   const authenticate = e => {
     e.preventDefault();
     setLoading(true);
 
-    ajax
-      .post("http://localhost:8000/api/auth/login")
-      .send({
+    axios
+      .post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/login`, {
         email: email,
         password: password
       })
       .then(res => {
-        addCookie("userToken", res.body.token);
+        if (res.status === 200) {
+          addCookie("userToken", res.data.token);
+          setLoading(false);
+          navigate("/tasks");
+          setUserNotFound(false);
+          setWrongPassword(false);
+          checkIfUserSignedIn();
+        }
+      })
+      .catch(err => {
         setLoading(false);
-        navigate("/");
-        checkIfUserSignedIn();
+        if (err.response.status === 401) {
+          if (invalidUser(err.response)) {
+            setUserNotFound(true);
+          } else if (invalidPassword(err.response)) {
+            setWrongPassword(true);
+          }
+        }
       });
   };
 
@@ -33,10 +50,11 @@ export default function AuthForm({ type, checkIfUserSignedIn }) {
     e.preventDefault();
     setLoading(true);
 
-    ajax
-      .post("http://localhost:8000/api/auth/register")
-      .send({
+    axios
+      .post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/register`, {
+        name: name,
         email: email,
+        mobile: mobile,
         password: password
       })
       .then(res => {
@@ -53,21 +71,25 @@ export default function AuthForm({ type, checkIfUserSignedIn }) {
   const forgotPassword = e => {
     e.preventDefault();
     setLoading(true);
-    
-    ajax
-      .post("http://localhost:8000/api/auth/forgot")
-      .send({
+
+    axios
+      .post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/forgot`, {
         email: email,
         password: password
       })
       .then(res => {
         if (res.status === 200) {
           setLoading(false);
-          navigate(`/reset?token=${res.body.link}`);
+          navigate(`/reset?token=${res.data.link}`);
         }
       })
       .catch(err => console.log(err.message));
   };
+
+  const invalidUser = obj =>
+    obj.data.message === "User not found with given parameters";
+
+  const invalidPassword = obj => obj.data.message === "Invalid Credentials";
 
   const getComponent = () => {
     switch (type) {
@@ -79,6 +101,8 @@ export default function AuthForm({ type, checkIfUserSignedIn }) {
             updateEmail={email => setEmail(email)}
             password={password}
             updatePassword={password => setPassword(password)}
+            notFound={userNotFound}
+            wrongPassword={wrongPassword}
           />
         );
       case "register":
@@ -89,6 +113,10 @@ export default function AuthForm({ type, checkIfUserSignedIn }) {
             updateEmail={email => setEmail(email)}
             password={password}
             updatePassword={password => setPassword(password)}
+            name={name}
+            updateName={name => setName(name)}
+            mobile={mobile}
+            updateMobile={mobile => setMobile(mobile)}
           />
         );
       case "forgot":
@@ -112,7 +140,6 @@ export default function AuthForm({ type, checkIfUserSignedIn }) {
 export function Login(props) {
   return (
     <>
-      <div>Login Page</div>
       <form>
         <div className="form-group">
           <label htmlFor="exampleInputEmail1">Email address</label>
@@ -144,6 +171,8 @@ export function Login(props) {
         >
           Submit
         </button>
+        {props.notFound && <div>User not found!!</div>}
+        {props.wrongPassword && <div>Invalid Credentials!!</div>}
       </form>
     </>
   );
@@ -152,8 +181,16 @@ export function Login(props) {
 export function Register(props) {
   return (
     <>
-      <div>Sign Up Page</div>
       <form>
+        <div className="form-group">
+          <label htmlFor="exampleInputEmail1">Name</label>
+          <input
+            className="form-control"
+            placeholder="Enter Name"
+            value={props.name}
+            onChange={e => props.updateName(e.target.value)}
+          />
+        </div>
         <div className="form-group">
           <label htmlFor="exampleInputEmail1">Email address</label>
           <input
@@ -162,6 +199,7 @@ export function Register(props) {
             id="exampleInputEmail1"
             aria-describedby="emailHelp"
             placeholder="Enter email"
+            required={true}
             value={props.email}
             onChange={e => props.updateEmail(e.target.value)}
           />
@@ -173,8 +211,18 @@ export function Register(props) {
             className="form-control"
             id="exampleInputPassword1"
             placeholder="Password"
+            required={true}
             value={props.password}
             onChange={e => props.updatePassword(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="exampleInputEmail1">Mobile</label>
+          <input
+            className="form-control"
+            placeholder="Enter mobile"
+            value={props.mobile}
+            onChange={e => props.updateMobile(e.target.value)}
           />
         </div>
         <button className="btn btn-primary" onClick={e => props.register(e)}>

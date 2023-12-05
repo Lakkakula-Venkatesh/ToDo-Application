@@ -2,8 +2,9 @@ const cors = require("cors");
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-// require("dotenv").config({ path: "../.env" });
-const authRoutes = require("./routes/auth");
+require("dotenv").config({ path: "vars/.env" });
+const authRoutes = require("./server/routes/auth");
+const taskRoutes = require("./server/routes/task");
 
 const app = express();
 
@@ -14,18 +15,21 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose.set("strictQuery", false);
 
-const PORT = 8000
+const PORT = 8000;
 
-app.listen(PORT, () => {});
+app.listen(PORT, () => {
+  console.log("Listening on port", PORT);
+});
 
 app.get("/", (req, res) => {
   res.json({ message: "API is working" });
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/tasks", taskRoutes);
 
 mongoose.connect(
-  "mongodb+srv://lakkakulavenkatesh8726:v42TMqcthrTZW9R7@cluster0.067gl2s.mongodb.net/?retryWrites=true&w=majority",
+  `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.067gl2s.mongodb.net/?retryWrites=true&w=majority`,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true

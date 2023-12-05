@@ -5,11 +5,16 @@ export default function Navbar({ authenticated, logoutUser }) {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       {authenticated ? (
-        <button className="btn btn-primary" onClick={e => logoutUser(e)}>
-          Logout
-        </button>
+        <div className="nav-btns">
+          <Link className="btn btn-secondary" to={"/tasks"}>
+            Tasks
+          </Link>
+          <button className="btn btn-primary" onClick={e => logoutUser(e)}>
+            Logout
+          </button>
+        </div>
       ) : (
-        <div className="btn-container">
+        <div className="btn-container nav-btns">
           <Link className="btn btn-primary" to={"/auth/login"}>
             Login
           </Link>

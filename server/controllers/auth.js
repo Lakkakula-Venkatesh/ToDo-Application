@@ -1,3 +1,5 @@
+require("dotenv").config({ path: "vars/.env" });
+
 const User = require("../models/user");
 
 const bcrypt = require("bcrypt");
@@ -5,7 +7,7 @@ const jwt = require("jsonwebtoken");
 const randomstring = require("randomstring");
 
 const SALT_ROUNDS = 10;
-const TOKEN_SECRET = "dirvnbpbcahqlbdwxhnzkkwagsrcscir";
+const TOKEN_SECRET = process.env.TOKEN_SECRET;
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -13,7 +15,7 @@ const login = async (req, res) => {
   const user = await User.findOne({ email: email });
 
   if (!user) {
-    res.status(400).send({ message: "User not found with given parameters" });
+    res.status(401).send({ message: "User not found with given parameters" });
     return;
   }
 
@@ -34,7 +36,7 @@ const login = async (req, res) => {
       token: generateWebToken(payload)
     });
   } else {
-    res.status(400).send({
+    res.status(401).send({
       message: "Invalid Credentials"
     });
   }
@@ -69,7 +71,7 @@ const register = async (req, res) => {
 
   const savedUser = await newUser.save();
 
-  res.status(400).send({
+  res.status(200).send({
     message: "User registration success",
     token: generateWebToken({ id: newUser.id, email: newUser.email })
   });
