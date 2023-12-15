@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import getCookie from "../helpers/BrowserHelper";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Task from "./Task";
+import TaskBox from "./TaskBox";
 
 export default function TaskList() {
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ export default function TaskList() {
     if (token === undefined) navigate("/");
     else {
       axios
-        .get(`/api/tasks/all`, {
+        .get(`${process.env.REACT_APP_BACKEND_URL}/api/tasks/all`, {
           params: {
             token: token
           }
@@ -29,7 +29,7 @@ export default function TaskList() {
   return (
     <>
       {tasks.map((task, index) => (
-        <Task key={index} task={task} />
+        <TaskBox key={index} task={task} />
       ))}
     </>
   );

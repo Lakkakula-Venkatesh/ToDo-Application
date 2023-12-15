@@ -1,35 +1,16 @@
-import React from "react";
 import axios from "axios";
-import moment from "moment";
+import React, { useEffect } from "react";
+import { useParams } from "react-router-dom";
 
-export default function Task(props) {
-  const task = props.task;
+export default function Task() {
+  const params = useParams();
 
-  const closeTask = taskId => {
+  useEffect(() => {
     axios
-      .post(`/api/tasks/complete`, { taskId: taskId })
-      .then(res => console.log(res))
-      .catch(err => console.log(err));
-  };
+      .get(`${process.env.REACT_APP_BACKEND_URL}/api/tasks/${params.taskId}`)
+      .then(res => console.log(res, "Res"))
+      .catch(err => console.log(err, "Err"));
+  }, []);
 
-  return (
-    <div className="task-card">
-      <div className="card">
-        <div className="card-header">{task.name}</div>
-        <div className="card-body">
-          <h5 className="card-title">{task.bookedUserEmail}</h5>
-          <p className="card-text">{task.description}</p>
-          <p className="card-text">
-            {moment(task.endDate).format("YYYY-MM-DD")}
-          </p>
-          <button
-            className="btn btn-primary"
-            onClick={() => closeTask(task._id)}
-          >
-            Mark as Done
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+  return <div>Task</div>;
 }

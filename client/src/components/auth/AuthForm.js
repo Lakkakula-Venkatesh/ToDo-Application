@@ -20,7 +20,7 @@ export default function AuthForm({ type, checkIfUserSignedIn }) {
     setLoading(true);
 
     axios
-      .post(`/api/auth/login`, {
+      .post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/login`, {
         email: email,
         password: password
       })
@@ -51,7 +51,7 @@ export default function AuthForm({ type, checkIfUserSignedIn }) {
     setLoading(true);
 
     axios
-      .post(`/api/auth/register`, {
+      .post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/register`, {
         name: name,
         email: email,
         mobile: mobile,
@@ -73,7 +73,7 @@ export default function AuthForm({ type, checkIfUserSignedIn }) {
     setLoading(true);
 
     axios
-      .post(`/api/auth/forgot`, {
+      .post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/forgot`, {
         email: email,
         password: password
       })

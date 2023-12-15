@@ -9,6 +9,7 @@ import getCookie, { deleteCookie } from "./helpers/BrowserHelper";
 import ajax from "superagent";
 import ResetPassword from "./components/auth/ResetPassword";
 import TaskList from "./components/TaskList";
+import Task from "./components/Task";
 
 function App() {
   const [authenticated, setAuthenticated] = React.useState(false);
@@ -69,6 +70,7 @@ function App() {
               />
             }
           />
+          <Route path="/task/:taskId" element={<Task />} />
           <Route path="/tasks" element={<TaskList />} />
           <Route path="/reset" element={<ResetPassword />} />
         </Routes>

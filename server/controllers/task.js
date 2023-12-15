@@ -63,7 +63,12 @@ const allTasks = async (req, res) => {
   res.status(200).send({ tasks: tasks });
 };
 
-const getTask = async (req, res) => {};
+const getTask = async (req, res) => {
+  console.log(req.path);
+  const { taskId } = req.query.task_id;
+
+  console.log(taskId);
+};
 
 const decryptToken = token => jwt.verify(token, TOKEN_SECRET);
 
